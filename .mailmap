@@ -1,0 +1,38 @@
+#
+# This list is used by git-shortlog to aggregate contributions.  It is
+# necessary when either the author's full name is not always written
+# the same way, and/or the same author contributes from different
+# email addresses.
+#
+# Pattern
+# Name you want to keep <email> Name you no longer want <email>
+#
+
+Amir Zahedi <amir.zahedi@gmail.com>
+Amir Zahedi <amir.zahedi@gmail.com> <amir@autoguru.com.au>
+Anthony Keller <anthony@autoguru.com.au>
+Anthony Keller <anthony@autoguru.com.au> <31554139+anthony-keller-79@users.noreply.github.com>
+Anthony Keller <anthony@autoguru.com.au> <anthony@fixedpricecarservice.com.au>
+Craig Lonsdale <craig@autoguru.com.au>
+Craig Lonsdale <craig@autoguru.com.au> <craig@fixedpricecarservice.com.au>
+Craig Lonsdale <craig@autoguru.com.au> <craig@fixedpriceauto.com.au>
+Kris Jayalath <kris@autoguru.com.au>
+Kris Jayalath <kris@autoguru.com.au> <kris@fixedpricecarservice.com.au>
+Kris Jayalath <kjayalath@gmail.com>
+Xavier Coscojuela <xavicosco@gmail.com>
+Xavier Coscojuela <xavicosco@gmail.com> <xavicosco@hotmail.com>
+Xavier Coscojuela <xavicosco@gmail.com> <xavier@autoguru.com.au>
+Nate Zerk <natezerk@gmail.com> <natezerk@gmail.com>
+Marais Rossouw <me@maraisr.com> <marais@autoguru.com.au>
+Jack Rorvik <jack@fixedpricecarservice.com.au>
+Jack Rorvik <jack@fixedpricecarservice.com.au> <jack.rorvik@gmail.com>
+Ben McCallum <ben.mccallum@live.com.au> 
+Ben McCallum <ben.mccallum@live.com.au> <ben.mccallum@autoguru.com.au>
+Ben McCallum <ben.mccallum@live.com.au> <ben@autoguru.com.au>
+Neil Kerkin <neil@fixedpricecarservice.com.au> <neil@fixedpriceauto.com.au>
+Ryan Dobbs <ryan@autoguru.com.au>
+Ryan Dobbs <ryan@autoguru.com.au> <rdobbs@gmail.com>
+Sonia Buckley <sonia@autoguru.com.au> <sonia.a.buckley@gmail.com>
+Yue Zhou <yue@autoguru.com.au>
+Yue Zhou <yue@autoguru.com.au> <yue@autoguru.com>
+Yue Zhou <yue@autoguru.com.au> <singlewind@msn.com>

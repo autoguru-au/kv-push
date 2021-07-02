@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AutoGuru.KeyValuePush.Redis": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Users\\benmc\\Desktop\\testkvps\" \"localhost:49153\" -d=3 -rj"
+    }
+  }
+}
