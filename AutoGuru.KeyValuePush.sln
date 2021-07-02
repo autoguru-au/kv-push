@@ -7,17 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoGuru.KeyValuePush", "sr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Repo Items", ".Repo Items", "{C80FEF4D-CE1E-449E-8879-497029445C6A}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 		Directory.Build.props = Directory.Build.props
 		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoGuru.KeyValuePush.Redis", "src\KeyValuePush.Redis\AutoGuru.KeyValuePush.Redis.csproj", "{379E9996-CE05-44CD-B255-5C88B1CE1BED}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{84B8DB71-ACBE-4C10-B71E-958C44A217B3}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
