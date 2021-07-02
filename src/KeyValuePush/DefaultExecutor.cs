@@ -49,13 +49,15 @@ namespace AutoGuru.KeyValuePush
                     redisDb,
                     dict, 
                     cancellationToken);
-                return 0;
             }
             catch (Exception ex)
             {
                 WriteException("Unexpected error!", ex);
                 return WriteError(ErrorCode.PusherError);
             }
+
+            Console.WriteLine($"Done. {dict.Count} were pushed.");
+            return 0;
         }
 
         private static void WriteException(string msg, Exception ex)
