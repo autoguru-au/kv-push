@@ -59,23 +59,31 @@ namespace AutoGuru.KeyValuePush.Redis
         public bool RecurseIntoJsonFiles { get; set; } = false;
 
         private readonly IExecutor _executor;
+        private readonly RedisPusher _pusher;
 
 #pragma warning disable CS8618 // Arg properties are always set before use by CommandLineUtils
-        public Program(IExecutor executor) => _executor = executor;
+        public Program(IExecutor executor, IPusher pusher)
+        {
+            _executor = executor;
+            _pusher = (RedisPusher)pusher;
+        }
 #pragma warning restore CS8618
 
         public async Task<int> OnExecuteAsync(
             CommandLineApplication app,
             CancellationToken cancellationToken = default)
         {
+            _pusher.Configure(
+                RedisConfiguration,
+                RedisDb);
+
             await _executor.ExecuteAsync(
                 Path, 
-                RedisConfiguration,
-                RedisDb,
                 SearchPattern, 
                 SearchOption, 
                 RecurseIntoJsonFiles, 
                 cancellationToken);
+
             return 0;
         }
     }

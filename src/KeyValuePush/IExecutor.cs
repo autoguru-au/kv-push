@@ -8,8 +8,6 @@ namespace AutoGuru.KeyValuePush
     {
         Task<int> ExecuteAsync(
             string path,
-            string redisConfiguration,
-            int? redisDb,
             string searchPattern,
             SearchOption searchOption,
             bool recurseIntoJsonFiles,

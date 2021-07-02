@@ -19,8 +19,6 @@ namespace AutoGuru.KeyValuePush
 
         public async Task<int> ExecuteAsync(
             string path,
-            string redisConfiguration,
-            int? redisDb,
             string searchPattern,
             SearchOption searchOption,
             bool recurseIntoJsonFiles,
@@ -45,8 +43,6 @@ namespace AutoGuru.KeyValuePush
             try
             {
                 await _pusher.PushAsync(
-                    redisConfiguration,
-                    redisDb,
                     dict, 
                     cancellationToken);
             }

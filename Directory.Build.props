@@ -3,10 +3,8 @@
   <PropertyGroup>
     <TargetFrameworks>net5.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
-    <Version>1.0.0-preview.2</Version>
-    <Description>A dotnet global tool for pushing key-value data somewhere.</Description>
     <Authors>Ben McCallum, AutoGuru</Authors>
-    <Product>kv-push-redis</Product>
+    <Product>kv-push</Product>
     <Copyright>Copyright © AutoGuru</Copyright>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>

@@ -7,8 +7,6 @@ namespace AutoGuru.KeyValuePush
     public interface IPusher
     {
         Task PushAsync(
-            string redisConfiguration,
-            int? redisDb,
             IDictionary<string, string> dictionary, 
             CancellationToken cancellationToken);
     }

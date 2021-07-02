@@ -1,4 +1,5 @@
 ﻿using StackExchange.Redis;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -6,22 +7,38 @@ using System.Threading.Tasks;
 
 namespace AutoGuru.KeyValuePush.Redis
 {
-    public class RedisPusher : IPusher
+    public class RedisPusher : IPusher, IDisposable
     {
-        public async Task PushAsync(
+        private ConnectionMultiplexer? _connectionMultiplexer;
+        private IDatabase? _db;
+
+        public void Configure(
             string redisConfiguration,
-            int? redisDb,
+            int? redisDb)
+        {
+            _connectionMultiplexer = ConnectionMultiplexer.Connect(redisConfiguration);
+            _db = redisDb.HasValue
+                ? _connectionMultiplexer.GetDatabase(redisDb.Value)
+                : _connectionMultiplexer.GetDatabase();
+        }
+
+        public async Task PushAsync(
             IDictionary<string, string> dictionary,
             CancellationToken cancellationToken)
         {
-            using var connectionMultiplexer = ConnectionMultiplexer.Connect(redisConfiguration);
-            var db = redisDb.HasValue 
-                ? connectionMultiplexer.GetDatabase(redisDb.Value)
-                : connectionMultiplexer.GetDatabase();
+            if (_db is null)
+            {
+                throw new Exception($"{nameof(RedisPusher)} wasn't configured yet.");
+            }
 
-            await db.StringSetAsync(dictionary
+            await _db.StringSetAsync(dictionary
                 .ToDictionary(kvp => new RedisKey(kvp.Key), kvp => new RedisValue(kvp.Value))
                 .ToArray());
+        }
+
+        public void Dispose()
+        {
+            _connectionMultiplexer?.Dispose();
         }
     }
 }
