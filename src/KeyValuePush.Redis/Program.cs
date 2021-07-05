@@ -28,7 +28,10 @@ namespace AutoGuru.KeyValuePush.Redis
         [Required]
         public string Path { get; set; }
 
-        [Argument(1, Description = "The redis configuration to connect to a redis instance with.")]
+        [Argument(1,
+            Description =
+                "The redis configuration to connect to a redis instance with. " +
+                "Should be parseable by `StackExchange.Redis.ConfigurationOptions.Parse`.")]
         [Required]
         public string RedisConfiguration { get; set; }
 

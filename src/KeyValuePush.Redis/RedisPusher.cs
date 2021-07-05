@@ -13,12 +13,13 @@ namespace AutoGuru.KeyValuePush.Redis
         private IDatabase? _db;
 
         public void Configure(
-            string redisConfiguration,
-            int? redisDb)
+            string configuration,
+            int? db)
         {
-            _connectionMultiplexer = ConnectionMultiplexer.Connect(redisConfiguration);
-            _db = redisDb.HasValue
-                ? _connectionMultiplexer.GetDatabase(redisDb.Value)
+            var configOptions = ConfigurationOptions.Parse(configuration);
+            _connectionMultiplexer = ConnectionMultiplexer.Connect(configOptions);
+            _db = db.HasValue
+                ? _connectionMultiplexer.GetDatabase(db.Value)
                 : _connectionMultiplexer.GetDatabase();
         }
 
