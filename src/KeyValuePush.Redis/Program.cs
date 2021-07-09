@@ -80,14 +80,12 @@ namespace AutoGuru.KeyValuePush.Redis
                 RedisConfiguration,
                 RedisDb);
 
-            await _executor.ExecuteAsync(
+            return await _executor.ExecuteAsync(
                 Path, 
                 SearchPattern, 
                 SearchOption, 
                 RecurseIntoJsonFiles, 
                 cancellationToken);
-
-            return 0;
         }
     }
 }
