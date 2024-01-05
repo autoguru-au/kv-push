@@ -1,7 +1,8 @@
 repo_name: autoguru-au/kv-push
 report_id: e71328a98d7c933de939f45ae963e39a
+version: 0.1
 repo_type: Public
-timestamp: '2023-11-10T01:37:56+00:00'
+timestamp: '2024-01-05T09:03:50+00:00'
 requested_by: benmccallum
 provider: github
 branch: main
@@ -16,6 +17,7 @@ tools:
   category: Languages & Frameworks
   sub_category: Languages
   image_url: https://img.stackshare.io/service/1015/1200px-C_Sharp_wordmark.svg.png
+  detection_source_url: https://github.com/autoguru-au/kv-push
   detection_source: Repo Metadata
 - name: ".NET"
   description: A free, cross-platform, open source developer platform for building
@@ -27,6 +29,7 @@ tools:
   category: Languages & Frameworks
   sub_category: Frameworks (Full Stack)
   image_url: https://img.stackshare.io/service/1014/IoPy1dce_400x400.png
+  detection_source_url: https://github.com/autoguru-au/kv-push/blob/main/src/KeyValuePush/AutoGuru.KeyValuePush.csproj
   detection_source: src/KeyValuePush/AutoGuru.KeyValuePush.csproj
   last_updated_by: Ben McCallum
   last_updated_on: 2021-07-02 15:12:57.000000000 Z
@@ -38,6 +41,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Version Control System
   image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source_url: https://github.com/autoguru-au/kv-push
   detection_source: Repo Metadata
 - name: GitHub
   description: Powerful collaboration, review, and code management for open source
@@ -48,6 +52,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Code Collaboration & Version Control
   image_url: https://img.stackshare.io/service/27/default_869c34d29acc794d60ecdd5d2b5bfc042a80a4ec.jpg
+  detection_source_url: https://github.com/autoguru-au/kv-push/blob/main/src/KeyValuePush/AutoGuru.KeyValuePush.csproj
   detection_source: src/KeyValuePush/AutoGuru.KeyValuePush.csproj
   last_updated_by: Ben McCallum
   last_updated_on: 2021-07-02 15:12:57.000000000 Z
@@ -59,6 +64,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Continuous Integration
   image_url: https://img.stackshare.io/service/11563/actions.png
+  detection_source_url: https://github.com/autoguru-au/kv-push/blob/main/.github/workflows/main.yml
   detection_source: ".github/workflows/main.yml"
   last_updated_by: Ben McCallum
   last_updated_on: 2021-07-02 15:48:35.000000000 Z
@@ -70,6 +76,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Package Managers
   image_url: https://img.stackshare.io/service/2637/6I3oEOP4_400x400.jpg
+  detection_source_url: https://github.com/autoguru-au/kv-push/blob/main/src/KeyValuePush/AutoGuru.KeyValuePush.csproj
   detection_source: src/KeyValuePush/AutoGuru.KeyValuePush.csproj
   last_updated_by: Ben McCallum
   last_updated_on: 2021-07-02 15:12:57.000000000 Z
@@ -82,6 +89,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Integrated Development Environment
   image_url: https://img.stackshare.io/service/1451/SR2hUhQN.png
+  detection_source_url: https://github.com/autoguru-au/kv-push/blob/main/AutoGuru.KeyValuePush.sln
   detection_source: AutoGuru.KeyValuePush.sln
   last_updated_by: Ben McCallum
   last_updated_on: 2021-07-02 15:12:57.000000000 Z
@@ -95,7 +103,7 @@ tools:
   category: Libraries
   sub_category: NuGet Packages
   image_url: https://img.stackshare.io/package/13508/default_acafa9133bcbebb2b966c9340c23194c2f9bf7bc.png
-  detection_source_url: src/KeyValuePush.Redis/AutoGuru.KeyValuePush.Redis.csproj
+  detection_source_url: https://github.com/autoguru-au/kv-push/blob/main/src/KeyValuePush.Redis/AutoGuru.KeyValuePush.Redis.csproj
   detection_source: src/KeyValuePush.Redis/AutoGuru.KeyValuePush.Redis.csproj
   last_updated_by: Ben McCallum
   last_updated_on: 2021-07-09 17:00:41.000000000 Z
@@ -109,7 +117,7 @@ tools:
   category: Libraries
   sub_category: NuGet Packages
   image_url: https://img.stackshare.io/package/13339/default_bf5ef28b557cbc9d58bff0b01afc8f39b37cfbc6.png
-  detection_source_url: src/KeyValuePush/AutoGuru.KeyValuePush.csproj
+  detection_source_url: https://github.com/autoguru-au/kv-push/blob/main/src/KeyValuePush/AutoGuru.KeyValuePush.csproj
   detection_source: src/KeyValuePush/AutoGuru.KeyValuePush.csproj
   last_updated_by: Ben McCallum
   last_updated_on: 2021-07-02 15:12:57.000000000 Z
@@ -123,7 +131,7 @@ tools:
   category: Libraries
   sub_category: NuGet Packages
   image_url: https://img.stackshare.io/package/12896/default_3ee9e3bfd65cbae9db28ab78b712a58bcd81af27.png
-  detection_source_url: src/KeyValuePush.Redis/AutoGuru.KeyValuePush.Redis.csproj
+  detection_source_url: https://github.com/autoguru-au/kv-push/blob/main/src/KeyValuePush.Redis/AutoGuru.KeyValuePush.Redis.csproj
   detection_source: src/KeyValuePush.Redis/AutoGuru.KeyValuePush.Redis.csproj
   last_updated_by: Ben McCallum
   last_updated_on: 2021-07-02 16:14:33.000000000 Z
