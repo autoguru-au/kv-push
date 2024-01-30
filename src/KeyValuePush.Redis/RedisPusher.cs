@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoGuru.KeyValuePush.Redis
 {
-    public class RedisPusher : IPusher, IDisposable
+    public sealed class RedisPusher : IPusher, IDisposable
     {
         private ConnectionMultiplexer? _connectionMultiplexer;
         private IDatabase? _db;

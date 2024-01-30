@@ -14,14 +14,9 @@
     <RepositoryType>git</RepositoryType>
     <IsPackable>false</IsPackable>
     <NoPackageAnalysis>true</NoPackageAnalysis>
-    <LangVersion>latest</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateFullPaths Condition="'$(TERM_PROGRAM)' == 'vscode'">true</GenerateFullPaths>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-*" PrivateAssets="All" Publish="false" />
-  </ItemGroup>
   
 </Project>
