@@ -18,11 +18,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Set up the .NET SDK
+      # Step 2: Setup .NET SDK
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '6.0'
+          dotnet-version: '8.0.x'
 
       # Step 3: Install SonarScanner for .NET
       - name: Install SonarScanner for .NET
@@ -32,25 +32,25 @@ jobs:
       - name: Install ReportGenerator
         run: dotnet tool install --global dotnet-reportgenerator-globaltool
 
-      # Step 5: Restore project dependencies
+      # Step 5: Restore dependencies
       - name: Restore dependencies
         run: dotnet restore
 
-      # Step 6: Run tests with coverage
+      # Step 6: Run tests and collect coverage
       - name: Run tests with coverage
         run: |
-          dotnet test \
+          dotnet test src/KeyValuePush.Tests/KeyValuePush.Tests.csproj \
             --collect:"XPlat Code Coverage" \
             --results-directory ./TestResults \
-            --settings ./PathToRunSettings/coverlet.runsettings
+            --settings ./coverlet.runsettings
 
-      # Step 7: Convert coverage to OpenCover
-      - name: Convert coverage to OpenCover
+      # Step 7: Convert coverage to OpenCover format
+      - name: Generate coverage report
         run: |
           reportgenerator \
-          -reports:./TestResults/**/coverage.cobertura.xml \
-          -targetdir:./CoverageResults \
-          -reporttypes:opencover
+            -reports:./TestResults/**/coverage.cobertura.xml \
+            -targetdir:./CoverageResults \
+            -reporttypes:opencover
 
       # Step 8: Run SonarCloud analysis
       - name: Run SonarCloud analysis
