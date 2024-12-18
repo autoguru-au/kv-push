@@ -36,13 +36,12 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      # Step 6: Run tests and collect coverage
+      # Step 6: Run tests with coverage
       - name: Run tests with coverage
         run: |
-          dotnet test src/KeyValuePush.Tests/KeyValuePush.Tests.csproj \
+          dotnet test \
             --collect:"XPlat Code Coverage" \
-            --results-directory ./TestResults \
-            --settings ./coverlet.runsettings
+            --results-directory ./TestResults
 
       # Step 7: Convert coverage to OpenCover format
       - name: Generate coverage report
@@ -64,3 +63,4 @@ jobs:
             /d:sonar.cs.opencover.reportsPaths="CoverageResults/coverage.opencover.xml"
           dotnet build
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+
