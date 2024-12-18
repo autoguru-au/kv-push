@@ -1,4 +1,4 @@
-name: SonarQube Analysis
+name: SonarQube Analysis (C#)
 
 on:
   push:
@@ -10,41 +10,43 @@ on:
 
 jobs:
   sonarcloud:
-    name: Analyze with SonarQube
+    name: Analyze with SonarCloud
     runs-on: ubuntu-latest
 
     steps:
       # 1. Checkout del repositorio
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Setup de Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      # 2. Configuración del SDK de .NET
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
         with:
-          node-version: '20'
+          dotnet-version: '6.0'
 
-      # 3. Instalación de dependencias
-      - name: Install Dependencies
-        run: |
-          npm install
+      # 3. Restaurar dependencias
+      - name: Restore dependencies
+        run: dotnet restore
 
-      # 4. Ejecutar pruebas unitarias
-      - name: Run Tests
-        run: |
-          npm test -- --coverage
+      # 4. Compilar el proyecto
+      - name: Build project
+        run: dotnet build --no-restore
 
-      # 5. Configuración de SonarCloud
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2.0.2
+      # 5. Ejecutar análisis de SonarCloud
+      - name: Run SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          projectBaseDir: .
-          args: >
-            -Dsonar.projectKey=autoguru-au_kv-push
-            -Dsonar.organization=autoguru-au
-            -Dsonar.sources=src
-            -Dsonar.tests=tests
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+        run: |
+          dotnet sonarscanner begin \
+            /k:"autoguru-au_kv-push" \
+            /o:"your-organization-key" \
+            /d:sonar.login="${{ secrets.SONAR_TOKEN }}" \
+            /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+          dotnet build
+          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+
+      # 6. Opcional: Ejecutar pruebas y generar cobertura
+      - name: Run tests
+        run: |
+          dotnet test --collect:"XPlat Code Coverage" \
+            --results-directory ./TestResults
