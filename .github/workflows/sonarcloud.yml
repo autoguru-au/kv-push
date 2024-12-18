@@ -57,7 +57,7 @@ jobs:
         run: |
           dotnet sonarscanner begin \
             /k:"autoguru-au_kv-push" \
-            /o:"your-organization-key" \
+            /o:"autoguru-au" \
             /d:sonar.login="${{ secrets.SONAR_TOKEN }}" \
             /d:sonar.cs.opencover.reportsPaths="CoverageResults/coverage.opencover.xml"
           dotnet build
