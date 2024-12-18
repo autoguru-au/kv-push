@@ -24,13 +24,13 @@ jobs:
         with:
           dotnet-version: '6.0'
 
-      # 3. Restaurar dependencias
+      # 3. Instalar SonarScanner para .NET
+      - name: Install SonarScanner for .NET
+        run: dotnet tool install --global dotnet-sonarscanner
+
+      # 4. Restaurar dependencias
       - name: Restore dependencies
         run: dotnet restore
-
-      # 4. Compilar el proyecto
-      - name: Build project
-        run: dotnet build --no-restore
 
       # 5. Ejecutar análisis de SonarCloud
       - name: Run SonarCloud analysis
