@@ -28,17 +28,21 @@ jobs:
       - name: Install SonarScanner for .NET
         run: dotnet tool install --global dotnet-sonarscanner
 
-      # Step 4: Restore project dependencies
+      # Step 4: Install ReportGenerator
+      - name: Install ReportGenerator
+        run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
+      # Step 5: Restore project dependencies
       - name: Restore dependencies
         run: dotnet restore
 
-      # Step 5: Run tests with coverage
+      # Step 6: Run tests with coverage
       - name: Run tests with coverage
         run: |
           dotnet test --collect:"XPlat Code Coverage" \
             --results-directory ./TestResults
 
-      # Step 6: Convert coverage to OpenCover
+      # Step 7: Convert coverage to OpenCover
       - name: Convert coverage to OpenCover
         run: |
           reportgenerator \
@@ -46,7 +50,7 @@ jobs:
           -targetdir:./CoverageResults \
           -reporttypes:opencover
 
-      # Step 7: Run SonarCloud analysis
+      # Step 8: Run SonarCloud analysis
       - name: Run SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
