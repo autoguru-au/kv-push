@@ -41,7 +41,7 @@ jobs:
         run: |
           dotnet test \
             --collect:"XPlat Code Coverage" \
-            -r ./TestResults \
+            --results-directory ./TestResults \
             --settings ./PathToRunSettings/coverlet.runsettings
 
       # Step 7: Convert coverage to OpenCover
