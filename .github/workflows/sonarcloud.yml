@@ -32,21 +32,29 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      # Step 5: Run SonarCloud analysis
+      # Step 5: Run tests with coverage
+      - name: Run tests with coverage
+        run: |
+          dotnet test --collect:"XPlat Code Coverage" \
+            --results-directory ./TestResults
+
+      # Step 6: Convert coverage to OpenCover
+      - name: Convert coverage to OpenCover
+        run: |
+          reportgenerator \
+          -reports:./TestResults/**/*.xml \
+          -targetdir:./CoverageResults \
+          -reporttypes:opencover
+
+      # Step 7: Run SonarCloud analysis
       - name: Run SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet sonarscanner begin \
             /k:"autoguru-au_kv-push" \
-            /o:"autoguru-au" \
+            /o:"your-organization-key" \
             /d:sonar.login="${{ secrets.SONAR_TOKEN }}" \
-            /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+            /d:sonar.cs.opencover.reportsPaths="CoverageResults/coverage.opencover.xml"
           dotnet build
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-
-      # Step 6: Optionally run tests and generate code coverage
-      - name: Run tests
-        run: |
-          dotnet test --collect:"XPlat Code Coverage" \
-            --results-directory ./TestResults
