@@ -14,25 +14,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout del repositorio
+      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Configuración del SDK de .NET
+      # Step 2: Set up the .NET SDK
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '6.0'
 
-      # 3. Instalar SonarScanner para .NET
+      # Step 3: Install SonarScanner for .NET
       - name: Install SonarScanner for .NET
         run: dotnet tool install --global dotnet-sonarscanner
 
-      # 4. Restaurar dependencias
+      # Step 4: Restore project dependencies
       - name: Restore dependencies
         run: dotnet restore
 
-      # 5. Ejecutar análisis de SonarCloud
+      # Step 5: Run SonarCloud analysis
       - name: Run SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -45,7 +45,7 @@ jobs:
           dotnet build
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
-      # 6. Opcional: Ejecutar pruebas y generar cobertura
+      # Step 6: Optionally run tests and generate code coverage
       - name: Run tests
         run: |
           dotnet test --collect:"XPlat Code Coverage" \
