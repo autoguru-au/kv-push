@@ -46,7 +46,7 @@ jobs:
       - name: Convert coverage to OpenCover
         run: |
           reportgenerator \
-          -reports:./TestResults/**/*.xml \
+          -reports:./TestResults/**/coverage.cobertura.xml \
           -targetdir:./CoverageResults \
           -reporttypes:opencover
 
@@ -57,7 +57,7 @@ jobs:
         run: |
           dotnet sonarscanner begin \
             /k:"autoguru-au_kv-push" \
-            /o:"autoguru-au" \
+            /o:"your-organization-key" \
             /d:sonar.login="${{ secrets.SONAR_TOKEN }}" \
             /d:sonar.cs.opencover.reportsPaths="CoverageResults/coverage.opencover.xml"
           dotnet build
