@@ -45,6 +45,10 @@ jobs:
             --collect:"XPlat Code Coverage" \
             --results-directory ./TestResults
 
+      # Verificar archivos generados después de las pruebas
+      - name: List files in TestResults
+        run: ls -R ./TestResults
+
       # Generar reporte de cobertura
       - name: Generate coverage report
         run: |
