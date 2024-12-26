@@ -40,16 +40,17 @@ jobs:
       - name: Run tests with coverage
         run: |
           dotnet test \
+            --settings coverlet.runsettings \
             --collect:"XPlat Code Coverage" \
             --results-directory ./TestResults
 
       # Step 7: Convert coverage to OpenCover format
-      - name: Generate coverage report
+      - name: Convert coverage to OpenCover
         run: |
           reportgenerator \
             -reports:./TestResults/**/coverage.cobertura.xml \
-            -targetdir:./CoverageResults \
-            -reporttypes:opencover
+            -targetdir:./TestResults/CoverageResults \
+            -reporttypes:"Cobertura;Html;opencover"
 
       # Step 8: Run SonarCloud analysis
       - name: Run SonarCloud analysis
@@ -60,7 +61,7 @@ jobs:
             /k:"autoguru-au_kv-push" \
             /o:"autoguru-au" \
             /d:sonar.login="${{ secrets.SONAR_TOKEN }}" \
-            /d:sonar.cs.opencover.reportsPaths="CoverageResults/coverage.opencover.xml"
+            /d:sonar.cs.opencover.reportsPaths="./TestResults/CoverageResults/coverage.opencover.xml" \
+            /d:sonar.scanner.skipJreProvisioning=true
           dotnet build
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-
