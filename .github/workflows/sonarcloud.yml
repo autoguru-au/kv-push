@@ -40,16 +40,16 @@ jobs:
       - name: Run tests with coverage
         run: |
           dotnet test \
-            --settings coverlet.runsettings \
+            --settings src/KeyValuePush.Tests/coverlet.runsettings \
             --collect:"XPlat Code Coverage" \
-            --results-directory ./TestResults
+            --results-directory src/KeyValuePush.Tests/TestResults
 
       # Step 7: Generate coverage report
       - name: Generate coverage report
         run: |
           reportgenerator \
-            -reports:./TestResults/**/coverage.cobertura.xml \
-            -targetdir:./TestResults/CoverageResults \
+            -reports:src/KeyValuePush.Tests/TestResults/**/coverage.cobertura.xml \
+            -targetdir:src/KeyValuePush.Tests/TestResults/CoverageResults \
             -reporttypes:cobertura
 
       # Step 8: Run SonarCloud analysis
@@ -60,7 +60,7 @@ jobs:
           dotnet sonarscanner begin \
             /k:"autoguru-au_kv-push" \
             /o:"autoguru-au" \
-            /d:sonar.cs.opencover.reportsPaths="./TestResults/CoverageResults/coverage.cobertura.xml" \
+            /d:sonar.cs.cobertura.reportsPaths="src/KeyValuePush.Tests/TestResults/CoverageResults/coverage.cobertura.xml" \
             /d:sonar.scanner.skipJreProvisioning=true \
             /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           dotnet build
