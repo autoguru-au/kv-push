@@ -22,7 +22,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '7.0.x'
 
       # Step 3: Install SonarScanner for .NET
       - name: Install SonarScanner for .NET
