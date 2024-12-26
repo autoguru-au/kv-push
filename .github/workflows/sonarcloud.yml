@@ -14,45 +14,50 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
+      # Checkout completo del repositorio
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      # Step 2: Setup .NET SDK
+      # Configuración de .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.x'
 
-      # Step 3: Install SonarScanner for .NET
+      # Instalar herramientas necesarias
       - name: Install SonarScanner for .NET
         run: dotnet tool install --global dotnet-sonarscanner
 
-      # Step 4: Install ReportGenerator
       - name: Install ReportGenerator
         run: dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.2.12
 
-      # Step 5: Restore dependencies
+      # Restaurar dependencias
       - name: Restore dependencies
         run: dotnet restore
 
-      # Step 6: Run tests with coverage
+      # Ejecutar pruebas y generar cobertura
       - name: Run tests with coverage
         run: |
           dotnet test \
             --settings ./coverlet.runsettings \
             --collect:"XPlat Code Coverage" \
-            --results-directory src/KeyValuePush.Tests/TestResults
+            --results-directory ./TestResults
 
-      # Step 7: Generate coverage report
+      # Generar reporte de cobertura
       - name: Generate coverage report
         run: |
           reportgenerator \
-            -reports:src/KeyValuePush.Tests/TestResults/**/coverage.cobertura.xml \
-            -targetdir:src/KeyValuePush.Tests/TestResults/CoverageResults \
+            -reports:./TestResults/**/coverage.cobertura.xml \
+            -targetdir:./TestResults/CoverageResults \
             -reporttypes:cobertura
 
-      # Step 8: Run SonarCloud analysis
+      # Verificar existencia del archivo de cobertura
+      - name: Verify coverage file
+        run: ls ./TestResults/CoverageResults/coverage.cobertura.xml
+
+      # Ejecutar análisis con SonarCloud
       - name: Run SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -60,7 +65,7 @@ jobs:
           dotnet sonarscanner begin \
             /k:"autoguru-au_kv-push" \
             /o:"autoguru-au" \
-            /d:sonar.cs.cobertura.reportsPaths="src/KeyValuePush.Tests/TestResults/CoverageResults/coverage.cobertura.xml" \
+            /d:sonar.cs.opencover.reportsPaths="./TestResults/CoverageResults/coverage.cobertura.xml" \
             /d:sonar.scanner.skipJreProvisioning=true \
             /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           dotnet build
