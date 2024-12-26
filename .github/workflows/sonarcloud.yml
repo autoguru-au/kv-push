@@ -70,7 +70,7 @@ jobs:
           dotnet sonarscanner begin \
             /k:"autoguru-au_kv-push" \
             /o:"autoguru-au" \
-            /d:sonar.cs.cobertura.reportsPaths="./TestResults/CoverageResults/coverage.cobertura.xml" \
+            /d:sonar.cs.cobertura.reportsPaths="./TestResults/**/coverage.cobertura.xml" \
             /d:sonar.scanner.skipJreProvisioning=true \
             /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           dotnet build
