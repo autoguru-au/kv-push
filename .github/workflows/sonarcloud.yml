@@ -30,7 +30,7 @@ jobs:
 
       # Step 4: Install ReportGenerator
       - name: Install ReportGenerator
-        run: dotnet tool install --global dotnet-reportgenerator-globaltool
+        run: dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.2.12
 
       # Step 5: Restore dependencies
       - name: Restore dependencies
