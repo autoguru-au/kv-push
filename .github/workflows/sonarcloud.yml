@@ -52,7 +52,6 @@ jobs:
             -targetdir:./TestResults/CoverageResults \
             -reporttypes:Cobertura
 
-
       # Step 8: Run SonarCloud analysis
       - name: Run SonarCloud analysis
         env:
@@ -62,8 +61,7 @@ jobs:
             /k:"autoguru-au_kv-push" \
             /o:"autoguru-au" \
             /d:sonar.login="${{ secrets.SONAR_TOKEN }}" \
-            /d:sonar.cs.cobertura.reportsPaths="./TestResults/CoverageResults/Cobertura.xml" \
+            /d:sonar.cs.cobertura.reportsPaths="TestResults/CoverageResults/Cobertura.xml" \
             /d:sonar.scanner.skipJreProvisioning=true
           dotnet build
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-
