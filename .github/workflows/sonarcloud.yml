@@ -14,26 +14,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Fetch all history for SonarCloud
-        run: git fetch --unshallow
-
+      # Step 2: Setup .NET SDK
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.x'
 
+      # Step 3: Install SonarScanner for .NET
       - name: Install SonarScanner for .NET
         run: dotnet tool install --global dotnet-sonarscanner
 
+      # Step 4: Install ReportGenerator
       - name: Install ReportGenerator
         run: dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.2.12
 
+      # Step 5: Restore dependencies
       - name: Restore dependencies
         run: dotnet restore
 
+      # Step 6: Run tests with coverage
       - name: Run tests with coverage
         run: |
           dotnet test \
@@ -41,13 +44,15 @@ jobs:
             --collect:"XPlat Code Coverage" \
             --results-directory ./TestResults
 
-      - name: Convert coverage report
+      # Step 7: Generate coverage report
+      - name: Generate coverage report
         run: |
           reportgenerator \
             -reports:./TestResults/**/coverage.cobertura.xml \
             -targetdir:./TestResults/CoverageResults \
-            -reporttypes:opencover;cobertura
+            -reporttypes:cobertura
 
+      # Step 8: Run SonarCloud analysis
       - name: Run SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -55,7 +60,7 @@ jobs:
           dotnet sonarscanner begin \
             /k:"autoguru-au_kv-push" \
             /o:"autoguru-au" \
-            /d:sonar.cs.opencover.reportsPaths="./TestResults/CoverageResults/coverage.opencover.xml" \
+            /d:sonar.cs.opencover.reportsPaths="./TestResults/CoverageResults/coverage.cobertura.xml" \
             /d:sonar.scanner.skipJreProvisioning=true
           dotnet build
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
