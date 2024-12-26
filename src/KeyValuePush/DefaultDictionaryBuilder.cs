@@ -52,7 +52,7 @@ namespace AutoGuru.KeyValuePush
             return dict;
         }
 
-        private static void TryAdd(IDictionary<string, string> dict, string key, string value)
+        public static void TryAdd(IDictionary<string, string> dict, string key, string value)
         {
             if (dict.ContainsKey(key))
             {
