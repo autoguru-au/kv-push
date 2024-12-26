@@ -61,6 +61,7 @@ jobs:
             /k:"autoguru-au_kv-push" \
             /o:"autoguru-au" \
             /d:sonar.cs.opencover.reportsPaths="./TestResults/CoverageResults/coverage.cobertura.xml" \
-            /d:sonar.scanner.skipJreProvisioning=true
+            /d:sonar.scanner.skipJreProvisioning=true \
+            /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           dotnet build
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
