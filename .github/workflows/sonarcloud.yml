@@ -14,13 +14,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout completo del repositorio
+      # Checkout del repositorio
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # Configuración de .NET
+      # Configurar .NET SDK
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -37,7 +37,7 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      # Ejecutar pruebas y generar cobertura
+      # Ejecutar pruebas con cobertura
       - name: Run tests with coverage
         run: |
           dotnet test \
@@ -45,7 +45,7 @@ jobs:
             --collect:"XPlat Code Coverage" \
             --results-directory ./TestResults
 
-      # Verificar archivos generados después de las pruebas
+      # Listar archivos en TestResults
       - name: List files in TestResults
         run: ls -R ./TestResults
 
@@ -55,11 +55,12 @@ jobs:
           reportgenerator \
             -reports:./TestResults/**/coverage.cobertura.xml \
             -targetdir:./TestResults/CoverageResults \
-            -reporttypes:cobertura
+            -reporttypes:cobertura \
+            -fileName:coverage.cobertura.xml
 
-      # Verificar existencia del archivo de cobertura
-      - name: Verify coverage file
-        run: ls ./TestResults/CoverageResults/coverage.cobertura.xml
+      # Verificar archivo de cobertura
+      - name: Verify CoverageResults files
+        run: ls -l ./TestResults/CoverageResults/
 
       # Ejecutar análisis con SonarCloud
       - name: Run SonarCloud analysis
