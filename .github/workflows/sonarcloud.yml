@@ -14,29 +14,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Setup .NET SDK
+      - name: Fetch all history for SonarCloud
+        run: git fetch --unshallow
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.x'
 
-      # Step 3: Install SonarScanner for .NET
       - name: Install SonarScanner for .NET
         run: dotnet tool install --global dotnet-sonarscanner
 
-      # Step 4: Install ReportGenerator
       - name: Install ReportGenerator
         run: dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.2.12
 
-      # Step 5: Restore dependencies
       - name: Restore dependencies
         run: dotnet restore
 
-      # Step 6: Run tests with coverage
       - name: Run tests with coverage
         run: |
           dotnet test \
@@ -44,15 +41,13 @@ jobs:
             --collect:"XPlat Code Coverage" \
             --results-directory ./TestResults
 
-      # Step 7: Convert coverage to Cobertura format
-      - name: Convert coverage to Cobertura format
+      - name: Convert coverage report
         run: |
           reportgenerator \
             -reports:./TestResults/**/coverage.cobertura.xml \
             -targetdir:./TestResults/CoverageResults \
-            -reporttypes:Cobertura
+            -reporttypes:opencover,cobertura
 
-      # Step 8: Run SonarCloud analysis
       - name: Run SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -60,8 +55,7 @@ jobs:
           dotnet sonarscanner begin \
             /k:"autoguru-au_kv-push" \
             /o:"autoguru-au" \
-            /d:sonar.login="${{ secrets.SONAR_TOKEN }}" \
-            /d:sonar.cs.cobertura.reportsPaths="TestResults/CoverageResults/Cobertura.xml" \
+            /d:sonar.cs.opencover.reportsPaths="./TestResults/CoverageResults/coverage.opencover.xml" \
             /d:sonar.scanner.skipJreProvisioning=true
           dotnet build
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
