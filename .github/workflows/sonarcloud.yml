@@ -31,14 +31,25 @@ jobs:
       - name: Install Coverlet.Console
         run: dotnet tool install --global coverlet.console
 
-      - name: Build and Test with Coverage
+      - name: Restore dependencies
+        run: dotnet restore ./AutoGuru.KeyValuePush.sln
+
+      - name: Build solution
+        run: dotnet build ./AutoGuru.KeyValuePush.sln --no-restore --configuration Debug
+
+      - name: Run tests with coverage
         run: |
-          dotnet build ./AutoGuru.KeyValuePush.sln
           coverlet ./src/KeyValuePush.Tests/bin/Debug/net7.0/KeyValuePush.Tests.dll \
             --target "dotnet" \
-            --targetargs "test ./src/KeyValuePush.Tests/KeyValuePush.Tests.csproj --no-build" \
+            --targetargs "test ./src/KeyValuePush.Tests/KeyValuePush.Tests.csproj --no-build --logger trx --results-directory ./TestResults/" \
             --output ./TestResults/Coverage/ \
             --format opencover
+
+      - name: Upload test results (optional, for visibility in GitHub Actions)
+        uses: actions/upload-artifact@v3
+        with:
+          name: TestResults
+          path: ./TestResults/
 
       - name: Run SonarCloud analysis
         env:
@@ -48,7 +59,10 @@ jobs:
             /k:"autoguru-au_kv-push" \
             /o:"autoguru-au" \
             /d:sonar.cs.opencover.reportsPaths="./TestResults/Coverage/coverage.opencover.xml" \
+            /d:sonar.inclusions="**/*.cs" \
+            /d:sonar.exclusions="**/bin/**,**/obj/**" \
             /d:sonar.scanner.skipJreProvisioning=true \
+            /d:sonar.verbose=true \
             /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           dotnet build ./AutoGuru.KeyValuePush.sln
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
