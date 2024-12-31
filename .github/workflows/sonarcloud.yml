@@ -27,14 +27,17 @@ jobs:
       - name: Install SonarScanner for .NET
         run: dotnet tool install --global dotnet-sonarscanner
 
-      - name: Run tests with coverage
+      - name: Install Coverlet.Console
+        run: dotnet tool install --global coverlet.console
+
+      - name: Run tests with Coverlet
         run: |
-          dotnet test \
-            --collect:"XPlat Code Coverage" \
-            --results-directory ./TestResults \
-            /p:CollectCoverage=true \
-            /p:CoverletOutput=./TestResults/Coverage/ \
-            /p:CoverletOutputFormat=opencover
+          dotnet build ./src/KeyValuePush.sln
+          coverlet ./src/KeyValuePush.Tests/bin/Debug/net7.0/KeyValuePush.Tests.dll \
+            --target "dotnet" \
+            --targetargs "test ./src/KeyValuePush.Tests/KeyValuePush.Tests.csproj --no-build" \
+            --output ./TestResults/Coverage/ \
+            --format opencover
 
       - name: Run SonarCloud analysis
         env:
