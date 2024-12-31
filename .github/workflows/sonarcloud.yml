@@ -27,34 +27,14 @@ jobs:
       - name: Install SonarScanner for .NET
         run: dotnet tool install --global dotnet-sonarscanner
 
-      - name: Install ReportGenerator
-        run: dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.2.12
-
-      - name: Restore dependencies
-        run: dotnet restore
-
       - name: Run tests with coverage
         run: |
           dotnet test \
-            --settings ./coverlet.runsettings \
             --collect:"XPlat Code Coverage" \
-            --results-directory ./TestResults
-
-      - name: Generate coverage report
-        run: |
-          reportgenerator \
-            -reports:./TestResults/**/coverage.cobertura.xml \
-            -targetdir:./TestResults/CoverageResults \
-            -reporttypes:Cobertura
-
-      - name: Ensure correct report file path
-        run: |
-          if [ -f ./TestResults/CoverageResults/Cobertura.xml ]; then
-            mv ./TestResults/CoverageResults/Cobertura.xml ./TestResults/CoverageResults/coverage.cobertura.xml
-          fi
-
-      - name: Verify CoverageResults files
-        run: ls -l ./TestResults/CoverageResults/
+            --results-directory ./TestResults \
+            /p:CollectCoverage=true \
+            /p:CoverletOutput=./TestResults/Coverage/ \
+            /p:CoverletOutputFormat=opencover
 
       - name: Run SonarCloud analysis
         env:
@@ -63,7 +43,7 @@ jobs:
           dotnet sonarscanner begin \
             /k:"autoguru-au_kv-push" \
             /o:"autoguru-au" \
-            /d:sonar.cs.cobertura.reportsPaths="./TestResults/CoverageResults/Cobertura.xml" \
+            /d:sonar.cs.opencover.reportsPaths="./TestResults/Coverage/coverage.opencover.xml" \
             /d:sonar.scanner.skipJreProvisioning=true \
             /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           dotnet build
