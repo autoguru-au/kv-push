@@ -32,7 +32,7 @@ jobs:
 
       - name: Run tests with Coverlet
         run: |
-          dotnet build ./src/KeyValuePush.sln
+          dotnet build AutoGuru.KeyValuePush.sln
           coverlet ./src/KeyValuePush.Tests/bin/Debug/net7.0/KeyValuePush.Tests.dll \
             --target "dotnet" \
             --targetargs "test ./src/KeyValuePush.Tests/KeyValuePush.Tests.csproj --no-build" \
@@ -49,5 +49,5 @@ jobs:
             /d:sonar.cs.opencover.reportsPaths="./TestResults/Coverage/coverage.opencover.xml" \
             /d:sonar.scanner.skipJreProvisioning=true \
             /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-          dotnet build
+          dotnet build AutoGuru.KeyValuePush.sln
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
