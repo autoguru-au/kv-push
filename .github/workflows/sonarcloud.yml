@@ -43,7 +43,7 @@ jobs:
       - name: Generate coverage report
         run: |
           reportgenerator \
-            -reports:./src/KeyValuePush.Tests/TestResults/**/coverage.cobertura.xml \
+            -reports:./TestResults/**/coverage.cobertura.xml \
             -targetdir:./TestResults/CoverageResults \
             -reporttypes:Cobertura
 
