@@ -1,9 +1,10 @@
-name: SonarQube Analysis (C#)
+name: SonarCloud Analysis (C#)
 
 on:
   push:
     branches:
       - main
+      - feature/*
   pull_request:
     branches:
       - main
@@ -30,9 +31,9 @@ jobs:
       - name: Install Coverlet.Console
         run: dotnet tool install --global coverlet.console
 
-      - name: Run tests with Coverlet
+      - name: Build and Test with Coverage
         run: |
-          dotnet build AutoGuru.KeyValuePush.sln
+          dotnet build ./AutoGuru.KeyValuePush.sln
           coverlet ./src/KeyValuePush.Tests/bin/Debug/net7.0/KeyValuePush.Tests.dll \
             --target "dotnet" \
             --targetargs "test ./src/KeyValuePush.Tests/KeyValuePush.Tests.csproj --no-build" \
@@ -47,8 +48,6 @@ jobs:
             /k:"autoguru-au_kv-push" \
             /o:"autoguru-au" \
             /d:sonar.cs.opencover.reportsPaths="./TestResults/Coverage/coverage.opencover.xml" \
-            /d:sonar.scanner.skipJreProvisioning=true \
-            /d:sonar.scanner.scanAll=true \
-            /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-          dotnet build AutoGuru.KeyValuePush.sln
+            /d:sonar.scanner.skipJreProvisioning=true
+          dotnet build ./AutoGuru.KeyValuePush.sln
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
