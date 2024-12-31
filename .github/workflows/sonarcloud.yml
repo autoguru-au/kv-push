@@ -14,31 +14,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # Step 2: Setup .NET SDK
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.x'
 
-      # Step 3: Install SonarScanner for .NET
       - name: Install SonarScanner for .NET
         run: dotnet tool install --global dotnet-sonarscanner
 
-      # Step 4: Install ReportGenerator
       - name: Install ReportGenerator
         run: dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.2.12
 
-      # Step 5: Restore dependencies
       - name: Restore dependencies
         run: dotnet restore
 
-      # Step 6: Run tests with coverage
       - name: Run tests with coverage
         run: |
           dotnet test \
@@ -46,23 +40,22 @@ jobs:
             --collect:"XPlat Code Coverage" \
             --results-directory ./TestResults
 
-      # Step 7: Generate coverage report
       - name: Generate coverage report
         run: |
           reportgenerator \
-            -reports:./TestResults/**/coverage.cobertura.xml \
+            -reports:./src/KeyValuePush.Tests/TestResults/**/coverage.cobertura.xml \
             -targetdir:./TestResults/CoverageResults \
-            -reporttypes:cobertura
+            -reporttypes:Cobertura
 
-      # Step 8: Rename report for consistency
-      - name: Rename cobertura report
-        run: mv ./TestResults/CoverageResults/Cobertura.xml ./TestResults/CoverageResults/coverage.cobertura.xml
+      - name: Ensure correct report file path
+        run: |
+          if [ -f ./TestResults/CoverageResults/Cobertura.xml ]; then
+            mv ./TestResults/CoverageResults/Cobertura.xml ./TestResults/CoverageResults/coverage.cobertura.xml
+          fi
 
-      # Step 9: Verify CoverageResults files
       - name: Verify CoverageResults files
         run: ls -l ./TestResults/CoverageResults/
 
-      # Step 10: Run SonarCloud analysis
       - name: Run SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -70,7 +63,7 @@ jobs:
           dotnet sonarscanner begin \
             /k:"autoguru-au_kv-push" \
             /o:"autoguru-au" \
-            /d:sonar.cs.cobertura.reportsPaths="./TestResults/**/coverage.cobertura.xml" \
+            /d:sonar.cs.cobertura.reportsPaths="./TestResults/CoverageResults/coverage.cobertura.xml" \
             /d:sonar.scanner.skipJreProvisioning=true \
             /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           dotnet build
