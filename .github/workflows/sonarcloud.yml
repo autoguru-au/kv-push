@@ -56,8 +56,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet sonarscanner begin \
-            /k:"autoguru-au_kv-push" \
-            /o:"autoguru-au" \
+            /k:"vanguille_kv-push-sonar" \
+            /o:"vanguille" \
             /d:sonar.cs.opencover.reportsPaths="./TestResults/Coverage/coverage.opencover.xml" \
             /d:sonar.inclusions="**/*.cs" \
             /d:sonar.exclusions="**/bin/**,**/obj/**" \
