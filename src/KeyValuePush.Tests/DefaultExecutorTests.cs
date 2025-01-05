@@ -23,7 +23,7 @@ namespace KeyValuePush.Tests
         }
 
         [Fact]
-        public async Task ExecuteAsync_ShouldReturnZero_WhenSuccessful()
+        public async Task ExecuteAsync_ShouldReturnZero_WhenSuccessfulAsync()
         {
             // Arrange
             var dict = new Dictionary<string, string> { { "key1", "value1" } };
@@ -42,7 +42,7 @@ namespace KeyValuePush.Tests
         }
 
         [Fact]
-        public async Task ExecuteAsync_ShouldReturnBuilderError_WhenBuildAsyncFails()
+        public async Task ExecuteAsync_ShouldReturnBuilderError_WhenBuildAsyncFailsAsync()
         {
             // Arrange
             _mockDictionaryBuilder
@@ -57,7 +57,7 @@ namespace KeyValuePush.Tests
         }
 
         [Fact]
-        public async Task ExecuteAsync_ShouldReturnPusherError_WhenPushAsyncFails()
+        public async Task ExecuteAsync_ShouldReturnPusherError_WhenPushAsyncFailsAsync()
         {
             // Arrange
             var dict = new Dictionary<string, string> { { "key1", "value1" } };
@@ -76,7 +76,7 @@ namespace KeyValuePush.Tests
         }
 
         [Fact]
-        public async Task ExecuteAsync_ShouldLogErrorMessage_WhenExceptionOccurs()
+        public async Task ExecuteAsync_ShouldLogErrorMessage_WhenExceptionOccursAsync()
         {
             // Arrange
             var dict = new Dictionary<string, string> { { "key1", "value1" } };

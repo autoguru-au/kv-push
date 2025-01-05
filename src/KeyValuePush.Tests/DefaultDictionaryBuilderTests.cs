@@ -94,7 +94,7 @@ namespace KeyValuePush.Tests
         }
 
         [Fact]
-        public async Task BuildAsync_ShouldHandleDuplicateKeysInJsonFiles()
+        public async Task BuildAsync_ShouldHandleDuplicateKeysInJsonFilesAsync()
         {
             var path = "TestFiles";
             Directory.CreateDirectory(path);
@@ -118,7 +118,7 @@ namespace KeyValuePush.Tests
 
 
         [Fact]
-        public async Task BuildAsync_ShouldIgnoreFilesWithNonJsonExtensions()
+        public async Task BuildAsync_ShouldIgnoreFilesWithNonJsonExtensionsAsync()
         {
             var path = "TestFiles";
             Directory.CreateDirectory(path);
@@ -134,7 +134,7 @@ namespace KeyValuePush.Tests
 
 
         [Fact]
-        public async Task BuildAsync_ShouldCombineJsonAndTextFiles()
+        public async Task BuildAsync_ShouldCombineJsonAndTextFilesAsync()
         {
             var path = "TestFiles";
             Directory.CreateDirectory(path);
