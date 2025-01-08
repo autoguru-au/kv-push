@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <Authors>Ben McCallum, AutoGuru</Authors>
     <Product>kv-push</Product>
@@ -13,6 +13,7 @@
     <RepositoryType>git</RepositoryType>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateFullPaths Condition="'$(TERM_PROGRAM)' == 'vscode'">true</GenerateFullPaths>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 </Project>
