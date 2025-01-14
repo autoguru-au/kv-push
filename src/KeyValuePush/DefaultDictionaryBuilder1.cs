@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoGuru.KeyValuePush
 {
-    public class DefaultDictionaryBuilder : IDictionaryBuilder
+    public class DefaultDictionaryBuilder1 : IDictionaryBuilder
     {
         public async Task<IDictionary<string, string>> BuildAsync(
             string path,
