@@ -1,4 +1,4 @@
-name: SonarCloud Analysis (C#)
+name: SonarQube Analysis (C#)
 
 on:
   push:
@@ -9,8 +9,8 @@ on:
       - main
 
 jobs:
-  sonarcloud:
-    name: Analyze with SonarCloud
+  sonarqube:
+    name: Analyze with SonarQube
     runs-on: ubuntu-latest
 
     steps:
@@ -50,18 +50,19 @@ jobs:
           name: TestResults
           path: ./TestResults/
 
-      - name: Run SonarCloud analysis
+      - name: Run SonarQube analysis
         env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet sonarscanner begin \
-            /k:"autoguru-au_kv-push" \
-            /o:"autoguru-au" \
+            /k:"kv-push" \
             /d:sonar.cs.opencover.reportsPaths="./TestResults/Coverage/coverage.opencover.xml" \
             /d:sonar.inclusions="**/*.cs" \
             /d:sonar.exclusions="**/bin/**,**/obj/**" \
             /d:sonar.scanner.skipJreProvisioning=true \
             /d:sonar.verbose=true \
-            /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+            /d:sonar.login="${{ secrets.SONAR_TOKEN }}" \
+            /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
           dotnet build ./AutoGuru.KeyValuePush.sln
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
