@@ -58,7 +58,7 @@ jobs:
           dotnet sonarscanner begin \
             /k:"${{ github.repository }}" \
             /n:"${{ github.repository }}" \
-            /d:sonar.projectVersion="${{ github.sha }}" \
+            /v:"${{ github.sha }}" \
             /d:sonar.cs.opencover.reportsPaths="./TestResults/Coverage/coverage.opencover.xml" \
             /d:sonar.inclusions="**/*.cs" \
             /d:sonar.exclusions="**/bin/**,**/obj/**" \
