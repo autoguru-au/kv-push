@@ -56,8 +56,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet sonarscanner begin \
-            /k:"${{ github.repository }}" \
-            /n:"${{ github.repository }}" \
+            /k:"${{ github.event.repository.name }}" \
+            /n:"${{ github.event.repository.name }}" \
             /v:"${{ github.sha }}" \
             /d:sonar.cs.opencover.reportsPaths="./TestResults/Coverage/coverage.opencover.xml" \
             /d:sonar.inclusions="**/*.cs" \
