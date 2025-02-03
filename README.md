@@ -41,7 +41,7 @@ Options:
                                  doesn't support regular expressions. The default is: "*"
   -so|--search-option            One of the enumeration values that specifies whether the search operation should
                                  include all subdirectories or only the current directory. The default is:
-                                 TopDirectoryOnly
+                                 TopDirectoryOnly 
   -rj|--recurse-into-json-files  Whether to recurse into json files. If true, json files are considered to have
                                  key-value pairs in them too (e.g. a top-level object with a single level of kvps) and
                                  these will be crawled, extracted and pushed individually. The default is: false.
