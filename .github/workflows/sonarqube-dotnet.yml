@@ -75,7 +75,7 @@ jobs:
           else
             dotnet restore ./TempSolution.sln --no-cache
           fi
-          
+
       - name: Build Tests
         if: inputs.enable_tests == true
         run: |
@@ -105,14 +105,6 @@ jobs:
             --output ./TestResults/Coverage/coverage.opencover.xml \
             --format opencover
 
-      - name: Upload Test Results
-        if: inputs.enable_tests == true
-        uses: actions/upload-artifact@v4
-        with:
-          name: TestResults
-          path: ./TestResults/
-
-      # 📤 Upload Test Results
       - name: Upload Test Results
         if: inputs.enable_tests == true
         uses: actions/upload-artifact@v4
