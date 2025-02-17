@@ -3,10 +3,10 @@ name: SonarQube Analysis (C#)
 on:
   push:
     branches:
-      - main
+      - mainxx
   pull_request:
     branches:
-      - main
+      - mainxx
 
 jobs:
   sonarqube:

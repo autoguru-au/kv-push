@@ -32,6 +32,10 @@ jobs:
       - name: Install Sonar Scanner
         run: dotnet tool install --global dotnet-sonarscanner
 
+      - name: Install Coverlet
+        if: inputs.enable_tests == true
+        run: dotnet tool install --global coverlet.console
+
       # Configuración especial para proyectos grandes
       - name: Create Temporary Solution (For Large .NET Projects)
         if: inputs.enable_tests == false
@@ -44,8 +48,7 @@ jobs:
       - name: Run Tests with Coverage
         if: inputs.enable_tests == true
         run: |
-          dotnet test --collect:"XPlat Code Coverage" --logger trx --results-directory ./TestResults/
-          coverlet ./TestResults/Coverage/coverage.opencover.xml --target "dotnet" --targetargs "test --no-build --logger trx --results-directory ./TestResults/"
+          dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./TestResults/coverage.opencover.xml
 
       - name: Run SonarQube Analysis
         env:
@@ -58,12 +61,12 @@ jobs:
             /d:sonar.login='${{ secrets.SONAR_TOKEN }}'"
 
           if [ "${{ inputs.enable_tests }}" == "true" ]; then
-            SONAR_CMD="$SONAR_CMD /d:sonar.cs.opencover.reportsPaths='TestResults/Coverage/coverage.opencover.xml'"
+            SONAR_CMD="$SONAR_CMD /d:sonar.cs.opencover.reportsPaths='TestResults/coverage.opencover.xml'"
           fi
 
           dotnet build
           if [ "${{ inputs.enable_tests }}" == "true" ]; then
-            dotnet test --no-build --collect:"XPlat Code Coverage"
+            dotnet test --no-build
           else
             dotnet build ./TempSolution.sln
           fi
