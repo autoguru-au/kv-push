@@ -60,7 +60,7 @@ jobs:
           fi
           echo "SOLUTION_FILE=$SOLUTION_FILE" >> $GITHUB_ENV
 
-     # 🛠 Create Temporary Solution (if tests are disabled)
+      # 🛠 Create Temporary Solution (if tests are disabled)
       - name: Create Temporary Solution (Exclude Tests)
         if: inputs.enable_tests == false
         run: |
@@ -76,6 +76,7 @@ jobs:
           else
             dotnet restore ./TempSolution.sln --no-cache
           fi
+
       # 🏗 Build Tests (Only if enabled)
       - name: Build Tests
         if: inputs.enable_tests == true
@@ -89,7 +90,7 @@ jobs:
             dotnet build "$TEST_PROJECT" --configuration Debug --framework net8.0
           done
 
-      # ✅ Run Tests with Coverage
+      # ✅ Run Tests with Coverage (Fixing TEST_DLL issue)
       - name: Run Tests with Coverage
         if: inputs.enable_tests == true
         run: |
@@ -99,11 +100,15 @@ jobs:
             exit 0
           fi
           for TEST_PROJECT in $TEST_PROJECTS; do
-            TEST_DLL=$(find ./ -name '*.dll' | grep '/bin/Debug/net8.0/' | grep 'Test')
+            # Encontrar el DLL correcto evitando dependencias innecesarias
+            TEST_DLL=$(find ./ -name '*.dll' | grep "/bin/Debug/net8.0/" | grep -vE 'Moq|xunit|Microsoft.TestPlatform|testhost' | head -n 1)
+            
             if [ -z "$TEST_DLL" ]; then
-              echo "⚠️ No test DLL found for $TEST_PROJECT! Skipping coverage."
+              echo "⚠️ No valid test DLL found for $TEST_PROJECT! Skipping coverage."
               continue
             fi
+
+            echo "✅ Running coverage for $TEST_DLL"
             coverlet "$TEST_DLL" \
               --target "dotnet" \
               --targetargs "test $TEST_PROJECT --no-build --framework net8.0 --logger trx --results-directory ./TestResults/" \
