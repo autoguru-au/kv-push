@@ -60,11 +60,7 @@ jobs:
           fi
           echo "SOLUTION_FILE=$SOLUTION_FILE" >> $GITHUB_ENV
 
-      # 📦 Restore Dependencies
-      - name: Restore Dependencies
-        run: dotnet restore ${{ env.SOLUTION_FILE }}
-
-      # 🛠 Create Temporary Solution (Exclude Test Projects)
+     # 🛠 Create Temporary Solution (if tests are disabled)
       - name: Create Temporary Solution (Exclude Tests)
         if: inputs.enable_tests == false
         run: |
@@ -72,36 +68,48 @@ jobs:
           dotnet new sln -n TempSolution -o ./ --force
           dotnet sln ./TempSolution.sln add $(find ./ -name '*.csproj' | grep -vE '/test/|/tests/|.*Test.*.csproj|AutoGuru.AirwallexClient.csproj|AutoGuru.Stripe.Client.csproj|AutoGuru.ThirdPartyIntegrationDocs.csproj')
 
+      # 📦 Restore dependencies
+      - name: Restore Dependencies
+        run: |
+          if [ "${{ inputs.enable_tests }}" == "true" ]; then
+            dotnet restore ${{ env.SOLUTION_FILE }} --no-cache
+          else
+            dotnet restore ./TempSolution.sln --no-cache
+          fi
       # 🏗 Build Tests (Only if enabled)
       - name: Build Tests
         if: inputs.enable_tests == true
         run: |
-          TEST_PROJECT=$(find ./ -name '*.csproj' | grep -E '/test/|/tests/|.*Test.*.csproj' | head -n 1)
-          if [ -z "$TEST_PROJECT" ]; then
-            echo "⚠️ No test project found! Skipping test build."
+          TEST_PROJECTS=$(find ./ -name '*.csproj' | grep -E '/test/|/tests/|.*Test.*.csproj')
+          if [ -z "$TEST_PROJECTS" ]; then
+            echo "⚠️ No test projects found! Skipping test build."
             exit 0
           fi
-          dotnet build $TEST_PROJECT --configuration Debug --framework net8.0
+          for TEST_PROJECT in $TEST_PROJECTS; do
+            dotnet build "$TEST_PROJECT" --configuration Debug --framework net8.0
+          done
 
       # ✅ Run Tests with Coverage
       - name: Run Tests with Coverage
         if: inputs.enable_tests == true
         run: |
-          TEST_PROJECT=$(find ./ -name '*.csproj' | grep -E '/test/|/tests/|.*Test.*.csproj' | head -n 1)
-          if [ -z "$TEST_PROJECT" ]; then
-            echo "⚠️ No test project found! Skipping tests."
+          TEST_PROJECTS=$(find ./ -name '*.csproj' | grep -E '/test/|/tests/|.*Test.*.csproj')
+          if [ -z "$TEST_PROJECTS" ]; then
+            echo "⚠️ No test projects found! Skipping tests."
             exit 0
           fi
-          TEST_DLL=$(find ./ -name '*.dll' | grep '/bin/Debug/net8.0/' | grep 'Test' | head -n 1)
-          if [ -z "$TEST_DLL" ]; then
-            echo "⚠️ No test DLL found! Skipping coverage."
-            exit 0
-          fi
-          coverlet $TEST_DLL \
-            --target "dotnet" \
-            --targetargs "test $TEST_PROJECT --no-build --framework net8.0 --logger trx --results-directory ./TestResults/" \
-            --output ./TestResults/Coverage/coverage.opencover.xml \
-            --format opencover
+          for TEST_PROJECT in $TEST_PROJECTS; do
+            TEST_DLL=$(find ./ -name '*.dll' | grep '/bin/Debug/net8.0/' | grep 'Test')
+            if [ -z "$TEST_DLL" ]; then
+              echo "⚠️ No test DLL found for $TEST_PROJECT! Skipping coverage."
+              continue
+            fi
+            coverlet "$TEST_DLL" \
+              --target "dotnet" \
+              --targetargs "test $TEST_PROJECT --no-build --framework net8.0 --logger trx --results-directory ./TestResults/" \
+              --output "./TestResults/Coverage/coverage.opencover.xml" \
+              --format opencover
+          done
 
       # 📤 Upload Test Results
       - name: Upload Test Results
