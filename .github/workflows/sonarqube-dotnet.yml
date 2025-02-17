@@ -1,0 +1,73 @@
+name: SonarQube Analysis (.NET)
+
+on:
+  workflow_call:
+    inputs:
+      enable_tests:
+        required: false
+        type: boolean
+        default: true
+    secrets:
+      SONAR_HOST_URL:
+        required: true
+      SONAR_TOKEN:
+        required: true
+
+jobs:
+  sonarqube:
+    name: Analyze .NET with SonarQube
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install Sonar Scanner
+        run: dotnet tool install --global dotnet-sonarscanner
+
+      # Configuración especial para proyectos grandes
+      - name: Create Temporary Solution (For Large .NET Projects)
+        if: inputs.enable_tests == false
+        run: |
+          echo "Creating temporary solution excluding test projects..."
+          dotnet new sln -n TempSolution -o ./ --force
+          dotnet sln ./TempSolution.sln add $(find ./src -name '*.csproj' | grep -vE '/test/|/tests/|.*Test.*.csproj')
+
+      # Run Tests and Generate Coverage (if enabled)
+      - name: Run Tests with Coverage
+        if: inputs.enable_tests == true
+        run: |
+          dotnet test --collect:"XPlat Code Coverage" --logger trx --results-directory ./TestResults/
+          coverlet ./TestResults/Coverage/coverage.opencover.xml --target "dotnet" --targetargs "test --no-build --logger trx --results-directory ./TestResults/"
+
+      - name: Run SonarQube Analysis
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          SONAR_CMD="dotnet sonarscanner begin \
+            /k:'${{ github.event.repository.name }}' \
+            /d:sonar.host.url='${{ secrets.SONAR_HOST_URL }}' \
+            /d:sonar.login='${{ secrets.SONAR_TOKEN }}'"
+
+          if [ "${{ inputs.enable_tests }}" == "true" ]; then
+            SONAR_CMD="$SONAR_CMD /d:sonar.cs.opencover.reportsPaths='TestResults/Coverage/coverage.opencover.xml'"
+          fi
+
+          dotnet build
+          if [ "${{ inputs.enable_tests }}" == "true" ]; then
+            dotnet test --no-build --collect:"XPlat Code Coverage"
+          else
+            dotnet build ./TempSolution.sln
+          fi
+
+          SONAR_CMD="$SONAR_CMD && dotnet sonarscanner end /d:sonar.login='${{ secrets.SONAR_TOKEN }}'"
+
+          eval $SONAR_CMD
