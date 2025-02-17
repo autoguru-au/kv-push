@@ -32,9 +32,31 @@ jobs:
       - name: Install Sonar Scanner
         run: dotnet tool install --global dotnet-sonarscanner
 
-      - name: Install Coverlet
+      - name: Install Coverlet.Console
         if: inputs.enable_tests == true
         run: dotnet tool install --global coverlet.console
+
+      - name: Restore Dependencies
+        run: dotnet restore ./AutoGuru.KeyValuePush.sln
+
+      - name: Build Tests
+        run: dotnet build ./src/KeyValuePush.Tests/KeyValuePush.Tests.csproj --configuration Debug --framework net8.0
+
+      - name: Run Tests with Coverage
+        if: inputs.enable_tests == true
+        run: |
+          coverlet ./src/KeyValuePush.Tests/bin/Debug/net8.0/KeyValuePush.Tests.dll \
+            --target "dotnet" \
+            --targetargs "test ./src/KeyValuePush.Tests/KeyValuePush.Tests.csproj --no-build --framework net8.0 --logger trx --results-directory ./TestResults/" \
+            --output ./TestResults/Coverage/coverage.opencover.xml \
+            --format opencover
+
+      - name: Upload Test Results (Optional)
+        if: inputs.enable_tests == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults
+          path: ./TestResults/
 
       - name: Start SonarQube Analysis
         env:
@@ -42,25 +64,22 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet sonarscanner begin \
-            /k:'${{ github.event.repository.name }}' \
-            /d:sonar.host.url='${{ secrets.SONAR_HOST_URL }}' \
-            /d:sonar.login='${{ secrets.SONAR_TOKEN }}' \
-            /d:sonar.cs.opencover.reportsPaths='TestResults/coverage.opencover.xml'
+            /k:"${{ github.event.repository.name }}" \
+            /n:"${{ github.event.repository.name }}" \
+            /v:"${{ github.sha }}" \
+            /d:sonar.cs.opencover.reportsPaths="./TestResults/Coverage/coverage.opencover.xml" \
+            /d:sonar.inclusions="**/*.cs" \
+            /d:sonar.exclusions="**/bin/**,**/obj/**" \
+            /d:sonar.scanner.skipJreProvisioning=true \
+            /d:sonar.verbose=true \
+            /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" \
+            /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
       - name: Build Solution
-        run: dotnet build --configuration Release
-
-      - name: Run Tests with Coverage
-        if: inputs.enable_tests == true
-        run: |
-          dotnet test --configuration Release \
-            /p:CollectCoverage=true \
-            /p:CoverletOutputFormat=opencover \
-            /p:CoverletOutput=./TestResults/coverage.opencover.xml
+        run: dotnet build ./AutoGuru.KeyValuePush.sln
 
       - name: Finish SonarQube Analysis
         env:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          dotnet sonarscanner end /d:sonar.login='${{ secrets.SONAR_TOKEN }}'
+        run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
