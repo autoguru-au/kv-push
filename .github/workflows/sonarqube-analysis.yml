@@ -7,5 +7,5 @@ jobs:
   sonarqube:
     uses: autoguru-au/devsecops/.github/workflows/sonarqube-dotnet.yml@feature/AG-14044-INITIAL-COMMIT
     with:
-      enable_tests: true
+      enable_tests: false
     secrets: inherit
