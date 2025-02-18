@@ -1,7 +1,9 @@
 name: SonarQube Analysis
 
 on:
-  push
+  push:
+    branches:
+      - develop
 
 jobs:
   sonarqube:
