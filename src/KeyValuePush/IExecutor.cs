@@ -2,15 +2,14 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AutoGuru.KeyValuePush
+namespace AutoGuru.KeyValuePush;
+
+public interface IExecutor
 {
-    public interface IExecutor
-    {
-        Task<int> ExecuteAsync(
-            string path,
-            string searchPattern,
-            SearchOption searchOption,
-            bool recurseIntoJsonFiles,
-            CancellationToken cancellationToken = default);
-    }
+    Task<int> ExecuteAsync(
+        string path,
+        string searchPattern,
+        SearchOption searchOption,
+        bool recurseIntoJsonFiles,
+        CancellationToken cancellationToken = default);
 }

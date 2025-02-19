@@ -5,41 +5,40 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AutoGuru.KeyValuePush.Redis
+namespace AutoGuru.KeyValuePush.Redis;
+
+public sealed class RedisPusher : IPusher, IDisposable
 {
-    public sealed class RedisPusher : IPusher, IDisposable
+    private ConnectionMultiplexer? _connectionMultiplexer;
+    private IDatabase? _db;
+
+    public void Configure(
+        string configuration,
+        int? db)
     {
-        private ConnectionMultiplexer? _connectionMultiplexer;
-        private IDatabase? _db;
+        var configOptions = ConfigurationOptions.Parse(configuration);
+        _connectionMultiplexer = ConnectionMultiplexer.Connect(configOptions);
+        _db = db.HasValue
+            ? _connectionMultiplexer.GetDatabase(db.Value)
+            : _connectionMultiplexer.GetDatabase();
+    }
 
-        public void Configure(
-            string configuration,
-            int? db)
+    public async Task PushAsync(
+        IDictionary<string, string> dictionary,
+        CancellationToken cancellationToken)
+    {
+        if (_db is null)
         {
-            var configOptions = ConfigurationOptions.Parse(configuration);
-            _connectionMultiplexer = ConnectionMultiplexer.Connect(configOptions);
-            _db = db.HasValue
-                ? _connectionMultiplexer.GetDatabase(db.Value)
-                : _connectionMultiplexer.GetDatabase();
+            throw new InvalidOperationException($"{nameof(RedisPusher)} wasn't configured yet.");
         }
 
-        public async Task PushAsync(
-            IDictionary<string, string> dictionary,
-            CancellationToken cancellationToken)
-        {
-            if (_db is null)
-            {
-                throw new Exception($"{nameof(RedisPusher)} wasn't configured yet.");
-            }
+        await _db.StringSetAsync(dictionary
+            .ToDictionary(kvp => new RedisKey(kvp.Key), kvp => new RedisValue(kvp.Value))
+            .ToArray());
+    }
 
-            await _db.StringSetAsync(dictionary
-                .ToDictionary(kvp => new RedisKey(kvp.Key), kvp => new RedisValue(kvp.Value))
-                .ToArray());
-        }
-
-        public void Dispose()
-        {
-            _connectionMultiplexer?.Dispose();
-        }
+    public void Dispose()
+    {
+        _connectionMultiplexer?.Dispose();
     }
 }
