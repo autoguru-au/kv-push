@@ -29,7 +29,7 @@ namespace AutoGuru.KeyValuePush.Redis
         {
             if (_db is null)
             {
-                throw new Exception($"{nameof(RedisPusher)} wasn't configured yet.");
+                throw new InvalidOperationException($"{nameof(RedisPusher)} wasn't configured yet.");
             }
 
             await _db.StringSetAsync(dictionary
