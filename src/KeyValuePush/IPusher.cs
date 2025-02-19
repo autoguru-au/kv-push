@@ -2,12 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AutoGuru.KeyValuePush
+namespace AutoGuru.KeyValuePush;
+
+public interface IPusher
 {
-    public interface IPusher
-    {
-        Task PushAsync(
-            IDictionary<string, string> dictionary, 
-            CancellationToken cancellationToken);
-    }
+    Task PushAsync(
+        IDictionary<string, string> dictionary, 
+        CancellationToken cancellationToken);
 }

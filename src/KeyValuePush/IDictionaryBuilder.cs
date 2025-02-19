@@ -3,15 +3,14 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AutoGuru.KeyValuePush
+namespace AutoGuru.KeyValuePush;
+
+public interface IDictionaryBuilder
 {
-    public interface IDictionaryBuilder
-    {
-        Task<IDictionary<string, string>> BuildAsync(
-            string path,
-            string searchPattern,
-            SearchOption searchOption,
-            bool recurseIntoJsonFiles,
-            CancellationToken cancellationToken);
-    }
+    Task<IDictionary<string, string>> BuildAsync(
+        string path,
+        string searchPattern,
+        SearchOption searchOption,
+        bool recurseIntoJsonFiles,
+        CancellationToken cancellationToken);
 }
