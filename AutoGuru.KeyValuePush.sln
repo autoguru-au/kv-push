@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29318.209
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoGuru.KeyValuePush", "src\KeyValuePush\AutoGuru.KeyValuePush.csproj", "{93798B54-012B-4DDD-BD14-FCB4CC61D720}"
 EndProject
@@ -15,9 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Repo Items", ".Repo Items"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoGuru.KeyValuePush.Redis", "src\KeyValuePush.Redis\AutoGuru.KeyValuePush.Redis.csproj", "{379E9996-CE05-44CD-B255-5C88B1CE1BED}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6598E4B4-D7D3-4633-9E2F-5C470917258D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyValuePush.Tests", "src\KeyValuePush.Tests\KeyValuePush.Tests.csproj", "{14E2DBAE-46BF-4109-8F87-5894B0C7E07E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyValuePush.Redis.Tests", "src\KeyValuePush.Redis.Tests\KeyValuePush.Redis.Tests.csproj", "{C231B7BF-EF47-125C-7083-32504FD22AF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,14 +37,15 @@ Global
 		{14E2DBAE-46BF-4109-8F87-5894B0C7E07E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14E2DBAE-46BF-4109-8F87-5894B0C7E07E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14E2DBAE-46BF-4109-8F87-5894B0C7E07E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C231B7BF-EF47-125C-7083-32504FD22AF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C231B7BF-EF47-125C-7083-32504FD22AF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C231B7BF-EF47-125C-7083-32504FD22AF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C231B7BF-EF47-125C-7083-32504FD22AF7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EE37C22E-E3CE-4E6B-8004-BB25FE05CB98}
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{14E2DBAE-46BF-4109-8F87-5894B0C7E07E} = {6598E4B4-D7D3-4633-9E2F-5C470917258D}
 	EndGlobalSection
 EndGlobal
